@@ -66,6 +66,8 @@ export function parseTextToTasks(sourceText) {
         note: notes.join(' | '),
         confidence,
         source_text: segment.text,
+        refinement_flags: [],
+        ai_touched_fields: [],
       }),
     );
   });

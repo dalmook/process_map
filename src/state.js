@@ -1,8 +1,13 @@
 import { normalizeTask } from './model.js';
 
 const state = {
-  tasks: [],
+  parserTasks: [],
+  refinedTasks: [],
+  viewMode: 'refined',
+  llmStatus: 'skipped',
+  llmMessage: '',
   message: null,
+  warnings: [],
   error: null,
 };
 
@@ -12,10 +17,29 @@ export function getState() {
   return state;
 }
 
-export function setTasks(tasks, message = null) {
-  state.tasks = tasks.map(normalizeTask);
-  state.message = message;
+export function getVisibleTasks() {
+  return state.viewMode === 'parser' ? state.parserTasks : state.refinedTasks;
+}
+
+export function setPipelineState(result) {
+  state.parserTasks = (result.parserTasks || []).map(normalizeTask);
+  state.refinedTasks = (result.refinedTasks || []).map(normalizeTask);
+  state.llmStatus = result.llmStatus || 'skipped';
+  state.llmMessage = result.llmMessage || '';
+  state.message = result.message || null;
+  state.warnings = result.warnings || [];
   state.error = null;
+
+  if (!state.refinedTasks.length && state.parserTasks.length) {
+    state.viewMode = 'parser';
+  }
+
+  emitChange();
+}
+
+export function setViewMode(mode) {
+  if (mode !== 'parser' && mode !== 'refined') return;
+  state.viewMode = mode;
   emitChange();
 }
 
@@ -27,10 +51,13 @@ export function setError(errorMessage) {
 export function clearMessages() {
   state.message = null;
   state.error = null;
+  state.warnings = [];
+  state.llmMessage = '';
 }
 
 export function updateTask(taskId, key, value) {
-  const task = state.tasks.find((item) => item.id === taskId);
+  const target = state.viewMode === 'parser' ? state.parserTasks : state.refinedTasks;
+  const task = target.find((item) => item.id === taskId);
   if (!task) return;
 
   task[key] = value;

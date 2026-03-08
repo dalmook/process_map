@@ -13,6 +13,8 @@
  * @property {string} note
  * @property {number} confidence
  * @property {string} source_text
+ * @property {string[]} refinement_flags
+ * @property {string[]} ai_touched_fields
  */
 
 /** @type {Array<keyof Task>} */
@@ -43,6 +45,8 @@ export function normalizeTask(task) {
   normalized.dependency = normalized.dependency || '';
   normalized.note = normalized.note || '';
   normalized.source_text = normalized.source_text || '';
+  normalized.refinement_flags = normalizeStringArray(normalized.refinement_flags);
+  normalized.ai_touched_fields = normalizeStringArray(normalized.ai_touched_fields);
   normalized.duration_days = calcDurationDays(normalized.start_date, normalized.end_date);
   normalized.confidence = clampNumber(Number(normalized.confidence), 0, 1);
   return normalized;
@@ -75,4 +79,15 @@ export function toDate(value) {
 function clampNumber(num, min, max) {
   if (!Number.isFinite(num)) return min;
   return Math.min(max, Math.max(min, num));
+}
+
+function normalizeStringArray(value) {
+  if (Array.isArray(value)) return value.map((item) => String(item));
+  if (typeof value === 'string' && value.trim()) {
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+  return [];
 }
