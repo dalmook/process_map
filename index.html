@@ -22,6 +22,15 @@
         <div class="actions">
           <button id="generateBtn" type="button">일정표 생성</button>
         </div>
+
+        <div class="view-controls">
+          <span class="label-inline">결과 보기</span>
+          <button id="viewParserBtn" type="button" class="ghost-btn active">규칙 기반 결과</button>
+          <button id="viewRefinedBtn" type="button" class="ghost-btn">LLM 보정 결과</button>
+          <span id="modeBadge" class="mode-badge">현재: LLM 보정 결과</span>
+          <span id="llmStatusBadge" class="mode-badge mode-neutral">LLM 상태: 미실행</span>
+        </div>
+
         <p id="feedbackMessage" class="feedback" aria-live="polite"></p>
       </section>
 
@@ -45,7 +54,7 @@
                 <th>dependency</th>
                 <th>note</th>
                 <th>confidence</th>
-                <th>source</th>
+                <th>source/diff</th>
               </tr>
             </thead>
             <tbody></tbody>
