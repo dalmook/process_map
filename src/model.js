@@ -12,6 +12,7 @@
  * @property {string} dependency
  * @property {string} note
  * @property {number} confidence
+ * @property {string} source_text
  */
 
 /** @type {Array<keyof Task>} */
@@ -36,6 +37,12 @@ export const TASK_COLUMNS = [
  */
 export function normalizeTask(task) {
   const normalized = { ...task };
+  normalized.owner = normalized.owner || '미지정';
+  normalized.start_date = normalized.start_date || '';
+  normalized.end_date = normalized.end_date || '';
+  normalized.dependency = normalized.dependency || '';
+  normalized.note = normalized.note || '';
+  normalized.source_text = normalized.source_text || '';
   normalized.duration_days = calcDurationDays(normalized.start_date, normalized.end_date);
   normalized.confidence = clampNumber(Number(normalized.confidence), 0, 1);
   return normalized;
