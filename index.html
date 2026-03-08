@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>붙여넣기 기반 AI 일정관리 MVP</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>AI 프로젝트 일정관리 MVP</h1>
+      <p>텍스트 붙여넣기 기반 일정표 생성</p>
+    </header>
+
+    <main class="layout">
+      <section class="panel input-panel">
+        <div class="panel-head">
+          <h2>1) 입력 영역</h2>
+        </div>
+        <label for="sourceText" class="label">회의록/업무메모/프로젝트 문서</label>
+        <textarea id="sourceText" aria-label="원문 텍스트"></textarea>
+        <div class="actions">
+          <button id="generateBtn" type="button">일정표 생성</button>
+        </div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-head">
+          <h2>2) 추출 결과 영역</h2>
+        </div>
+        <div class="table-wrap">
+          <table id="taskTable">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>task_name</th>
+                <th>parent_task</th>
+                <th>owner</th>
+                <th>start_date</th>
+                <th>end_date</th>
+                <th>duration_days</th>
+                <th>priority</th>
+                <th>status</th>
+                <th>dependency</th>
+                <th>note</th>
+                <th>confidence</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel gantt-panel">
+        <div class="panel-head">
+          <h2>3) 시각화 영역</h2>
+        </div>
+        <div id="ganttRoot" class="gantt-root"></div>
+      </section>
+    </main>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
